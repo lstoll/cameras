@@ -14,6 +14,14 @@
 			"ImportPath": "github.com/go-martini/martini",
 			"Comment": "v1.0-168-g1766d4b",
 			"Rev": "1766d4b551f29d93db1e721e19b15580699e26cc"
+		},
+		{
+			"ImportPath": "github.com/martini-contrib/render",
+			"Rev": "ec18f8345a1181146728238980606fb1d6f40e8c"
+		},
+		{
+			"ImportPath": "github.com/oxtoacart/bpool",
+			"Rev": "4e1c5567d7c2dd59fa4c7c83d34c2f3528b025d6"
 		}
 	]
 }
