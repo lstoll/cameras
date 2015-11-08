@@ -11,6 +11,7 @@ import (
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/binding"
 	"github.com/martini-contrib/render"
+	"github.com/martini-contrib/secure"
 	"github.com/martini-contrib/sessionauth"
 	"github.com/martini-contrib/sessions"
 )
@@ -23,9 +24,13 @@ func main() {
 	}))
 
 	// TODO - secret should be secret.
-	store := sessions.NewCookieStore([]byte("secret123"))
+	m.Use(secure.Secure(secure.Options{
+		SSLRedirect: true,
+	}))
+	store := sessions.NewCookieStore([]byte(os.Getenv("COOKIE_SECRET")))
 	m.Use(sessions.Sessions("the_session", store))
 	m.Use(sessionauth.SessionUser(GenerateAnonymousUser))
+	m.Run()
 
 	/** Main router **/
 

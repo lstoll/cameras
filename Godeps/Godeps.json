@@ -49,6 +49,10 @@
 			"Rev": "ec18f8345a1181146728238980606fb1d6f40e8c"
 		},
 		{
+			"ImportPath": "github.com/martini-contrib/secure",
+			"Rev": "de8e19a0490b816696d093388d53f2e1f0c08b7d"
+		},
+		{
 			"ImportPath": "github.com/martini-contrib/sessionauth",
 			"Rev": "3c15d8cae6c39a8feb3d3f72750084bd50bd52cc"
 		},
