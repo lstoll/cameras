@@ -25,7 +25,8 @@ func main() {
 
 	// TODO - secret should be secret.
 	m.Use(secure.Secure(secure.Options{
-		SSLRedirect: true,
+		SSLRedirect:     true,
+		SSLProxyHeaders: map[string]string{"X-Forwarded-Proto": "https"},
 	}))
 	store := sessions.NewCookieStore([]byte(os.Getenv("COOKIE_SECRET")))
 	m.Use(sessions.Sessions("the_session", store))
