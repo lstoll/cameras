@@ -5,12 +5,42 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="/css/mui.css" rel="stylesheet" type="text/css" />
+    <link href="/css/app.css" rel="stylesheet" type="text/css" />
+    <script src="/js/jquery-2.1.4.min.js"></script>
     <script src="/js/mui.js"></script>
+    <script src="/js/app.js"></script>
+    <title>Cameras</title>
   </head>
   <body>
-    <!-- example content -->
-    <div class="mui-container">
-      {{ yield }}
+   <div id="sidedrawer" class="mui--no-user-select">
+     <div id="sidedrawer-brand" class="mui--appbar-line-height mui--text-title">Cameras</div>
+<div class="mui-divider"></div>
+    <a href="/logout"><strong>Logout</strong></a>
+
+</ul>
+
+</div>
+<header id="header">
+  <div class="mui-appbar mui--appbar-line-height">
+    <div class="mui-container-fluid">
+      <a class="sidedrawer-toggle mui--visible-xs-inline-block js-show-sidedrawer">☰</a>
+      <a class="sidedrawer-toggle mui--hidden-xs js-hide-sidedrawer">☰</a>
+      <span class="mui--text-title mui--visible-xs-inline-block">Cameras</span>
     </div>
+  </div>
+</header>
+<div id="content-wrapper">
+
+<div class="mui--appbar-height"></div>
+<div class="mui-container-fluid">
+  {{ yield }}
+  </div>
+</div>
+<footer id="footer">
+  <div class="mui-container-fluid">
+    <br>
+    Made with ♥ by <a href="https://www.muicss.com">MUI</a>
+  </div>
+</footer>
   </body>
 </html>

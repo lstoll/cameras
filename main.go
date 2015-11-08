@@ -30,7 +30,9 @@ func main() {
 	/** Login Handling **/
 
 	m.Get("/login", func(r render.Render) {
-		r.HTML(200, "login", nil)
+		r.HTML(200, "login", nil, render.HTMLOptions{
+			Layout: "_login_layout",
+		})
 	})
 
 	m.Post("/login", binding.Bind(User{}), func(session sessions.Session, postedUser User, r render.Render, req *http.Request) {
