@@ -1,4 +1,6 @@
+{{ range $name, $url := . }}
 <div class="mui-panel">
-  <h1>{{.}}</h1>
-  <button class="mui-btn mui-btn--primary mui-btn--raised">{{.}} Button</button>
+  <h1>{{ $name }}</h1>
+  <img class="cam-image" data-src="/camimage?cam={{ $name }}" src="/camimage?cam={{ $name }}"/>
 </div>
+{{ end }}

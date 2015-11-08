@@ -1,8 +1,12 @@
 package main
 
 import (
+	"fmt"
+	"io"
 	"net/http"
+	"net/url"
 	"os"
+	"strings"
 
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/binding"
@@ -23,9 +27,10 @@ func main() {
 	m.Use(sessions.Sessions("the_session", store))
 	m.Use(sessionauth.SessionUser(GenerateAnonymousUser))
 
-	m.Get("/", sessionauth.LoginRequired, func(r render.Render) {
-		r.HTML(200, "index", "lol")
-	})
+	/** Main router **/
+
+	m.Get("/", sessionauth.LoginRequired, cameraList)
+	m.Get("/camimage", sessionauth.LoginRequired, cameraImage)
 
 	/** Login Handling **/
 
@@ -63,4 +68,75 @@ func main() {
 	})
 
 	m.Run()
+}
+
+func getCameras() map[string]string {
+	ret := map[string]string{}
+	// env var, comma separates list of http://u:p@host/img? Maybe name;url?
+	// FORMAT: CAMERAS="Downstairs;http://username:password@host/image.jpg,Inside;http://..."
+	cams := strings.Split(os.Getenv("CAMERAS"), ",")
+	for _, i := range cams {
+		f := strings.Split(i, ";")
+		ret[f[0]] = f[1]
+	}
+	return ret
+}
+
+func cameraImage(res http.ResponseWriter, req *http.Request) {
+	// get name from query param
+	camName := req.URL.Query().Get("cam")
+	if camName == "" {
+		res.WriteHeader(400)
+		fmt.Fprint(res, "need to specify cam")
+		return
+	}
+
+	camUrl, ok := getCameras()[camName]
+	if !ok {
+		res.WriteHeader(400)
+		fmt.Fprint(res, "Invalid cam name")
+		return
+	}
+
+	parsedUrl, err := url.Parse(camUrl)
+	if err != nil {
+		res.WriteHeader(500)
+		fmt.Fprintf(res, "%s", err)
+		return
+	}
+
+	imgReq, err := http.NewRequest("GET", camUrl, nil)
+	password, _ := parsedUrl.User.Password()
+	imgReq.SetBasicAuth(parsedUrl.User.Username(), password)
+	cli := &http.Client{}
+	img, err := cli.Do(imgReq)
+
+	if err != nil {
+		res.WriteHeader(500)
+		fmt.Fprintf(res, "%s", err)
+		return
+	}
+
+	defer func() { _ = img.Body.Close() }()
+
+	if img.StatusCode != 200 {
+		fmt.Fprintf(res, "Remote camera returned non-200 response %d", img.StatusCode)
+		return
+	}
+
+	res.Header().Set("Content-Length", fmt.Sprint(img.ContentLength))
+	res.Header().Set("Content-Type", img.Header.Get("Content-Type"))
+	if _, err = io.Copy(res, img.Body); err != nil {
+		return
+	}
+
+}
+
+func cameraList(r render.Render) {
+	// Get list of camera's out of env var
+
+	// render list of them
+
+	// auto refresh in js.
+	r.HTML(200, "index", getCameras())
 }
