@@ -169,3 +169,11 @@ buttons {
 #sidedrawer strong + ul > li {
   padding: 6px 0px;
 }
+
+/**
+Images
+**/
+
+img.cam-image {
+    max-width: 100%
+}
