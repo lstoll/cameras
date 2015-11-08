@@ -23,7 +23,6 @@ func main() {
 		Layout: "_layout",
 	}))
 
-	// TODO - secret should be secret.
 	m.Use(secure.Secure(secure.Options{
 		SSLRedirect:     true,
 		SSLProxyHeaders: map[string]string{"X-Forwarded-Proto": "https"},
@@ -31,7 +30,6 @@ func main() {
 	store := sessions.NewCookieStore([]byte(os.Getenv("COOKIE_SECRET")))
 	m.Use(sessions.Sessions("the_session", store))
 	m.Use(sessionauth.SessionUser(GenerateAnonymousUser))
-	m.Run()
 
 	/** Main router **/
 
@@ -139,10 +137,5 @@ func cameraImage(res http.ResponseWriter, req *http.Request) {
 }
 
 func cameraList(r render.Render) {
-	// Get list of camera's out of env var
-
-	// render list of them
-
-	// auto refresh in js.
 	r.HTML(200, "index", getCameras())
 }
