@@ -1,17 +1,22 @@
 package main
 
 import (
-	"net/http"
-
 	"github.com/go-martini/martini"
+	"github.com/martini-contrib/render"
 )
 
 func main() {
 	m := martini.Classic()
-	m.Get("/", func() string {
-		return "Hello world!"
+
+	m.Use(render.Renderer(render.Options{
+		Layout: "_layout",
+	}))
+
+	m.Get("/", func(r render.Render) {
+		r.HTML(200, "index", "lol")
 	})
-	http.Handle("/", m)
+
+	//http.Handle("/", m)
 
 	m.Run()
 }
